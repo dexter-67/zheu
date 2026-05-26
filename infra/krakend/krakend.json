@@ -1,0 +1,212 @@
+{
+  "version": 3,
+  "name": "zheu-api-gateway",
+  "port": 8080,
+  "timeout": "3000ms",
+  "cache_ttl": "0s",
+  "extra_config": {
+    "security/cors": {
+      "allow_origins": [
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+      ],
+      "allow_methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      "allow_headers": ["Origin", "Content-Type", "Authorization", "Accept"],
+      "expose_headers": ["Content-Length"],
+      "allow_credentials": true,
+      "max_age": "12h"
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/auth/register",
+      "method": "POST",
+      "input_headers": ["Content-Type"],
+      "backend": [
+        {
+          "host": ["http://core-service:8000"],
+          "url_pattern": "/auth/register"
+        }
+      ]
+    },
+    {
+      "endpoint": "/auth/login",
+      "method": "POST",
+      "input_headers": ["Content-Type"],
+      "backend": [
+        {
+          "host": ["http://core-service:8000"],
+          "url_pattern": "/auth/login"
+        }
+      ]
+    },
+    {
+      "endpoint": "/users/me",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://core-service:8000"],
+          "url_pattern": "/users/me",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/news",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://news-service:8000"],
+          "url_pattern": "/news/",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/news",
+      "method": "POST",
+      "input_headers": ["Authorization", "Content-Type"],
+      "backend": [
+        {
+          "host": ["http://news-service:8000"],
+          "url_pattern": "/news/"
+        }
+      ]
+    },
+    {
+      "endpoint": "/news/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://news-service:8000"],
+          "url_pattern": "/news/{id}",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/news/{id}",
+      "method": "PATCH",
+      "input_headers": ["Authorization", "Content-Type"],
+      "backend": [
+        {
+          "host": ["http://news-service:8000"],
+          "url_pattern": "/news/{id}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/news/{id}",
+      "method": "DELETE",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://news-service:8000"],
+          "url_pattern": "/news/{id}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/requests",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://requests-service:8000"],
+          "url_pattern": "/requests/",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/requests",
+      "method": "POST",
+      "input_headers": ["Authorization", "Content-Type"],
+      "backend": [
+        {
+          "host": ["http://requests-service:8000"],
+          "url_pattern": "/requests/"
+        }
+      ]
+    },
+    {
+      "endpoint": "/requests/my",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://requests-service:8000"],
+          "url_pattern": "/requests/my",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/requests/{id}",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://requests-service:8000"],
+          "url_pattern": "/requests/{id}",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/requests/{id}",
+      "method": "PATCH",
+      "input_headers": ["Authorization", "Content-Type"],
+      "backend": [
+        {
+          "host": ["http://requests-service:8000"],
+          "url_pattern": "/requests/{id}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/requests/{id}",
+      "method": "DELETE",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://requests-service:8000"],
+          "url_pattern": "/requests/{id}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/notifications/my",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "input_headers": ["Authorization"],
+      "backend": [
+        {
+          "host": ["http://notification-service:8000"],
+          "url_pattern": "/notifications/my",
+          "encoding": "no-op"
+        }
+      ]
+    },
+    {
+      "endpoint": "/notifications/{id}/read",
+      "method": "PATCH",
+      "input_headers": ["Authorization", "Content-Type"],
+      "backend": [
+        {
+          "host": ["http://notification-service:8000"],
+          "url_pattern": "/notifications/{id}/read"
+        }
+      ]
+    }
+  ]
+}

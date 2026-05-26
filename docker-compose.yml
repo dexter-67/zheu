@@ -1,0 +1,100 @@
+services:
+  core-service:
+    build: ./core_service
+    ports:
+      - "8001:8000"
+    environment:
+      - INTERNAL_API_TOKEN=${INTERNAL_API_TOKEN}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  news-service:
+    build: ./news_service
+    ports:
+      - "8002:8000"
+    environment:
+      - INTERNAL_API_TOKEN=${INTERNAL_API_TOKEN}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  requests-service:
+    build: ./requests_service
+    ports:
+      - "8003:8000"
+    environment:
+      - INTERNAL_API_TOKEN=${INTERNAL_API_TOKEN}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  notification-service:
+    build: ./notification_service
+    ports:
+      - "8004:8000"
+    environment:
+      - INTERNAL_API_TOKEN=${INTERNAL_API_TOKEN}
+      - RABBITMQ_URL=${RABBITMQ_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5500:80"
+    depends_on:
+      - api-gateway
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api-gateway:
+    image: devopsfaith/krakend:2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./infra/krakend/krakend.json:/etc/krakend/krakend.json:ro
+    command: ["run", "-c", "/etc/krakend/krakend.json"]
+    depends_on:
+      - core-service
+      - news-service
+      - requests-service
+      - notification-service
+
+volumes:
+  postgres_data:

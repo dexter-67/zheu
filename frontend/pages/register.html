@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>Регистрация | ЖЭУ</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="page-background">
+  <main class="min-h-screen flex items-center justify-center px-4">
+    <form
+      class="card w-full max-w-md bg-base-100/90 backdrop-blur shadow-2xl border border-white/20"
+      onsubmit="register(event)"
+    >
+      <div class="card-body">
+        <h1 class="text-3xl font-bold text-center">ЖЭУ</h1>
+
+        <p class="text-center text-base-content/60 mb-4">
+          Создание аккаунта жителя
+        </p>
+
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Email</span>
+          </div>
+
+          <input
+            id="email"
+            type="email"
+            class="input input-bordered"
+            required
+          />
+        </label>
+
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Имя пользователя</span>
+          </div>
+
+          <input
+            id="username"
+            type="text"
+            class="input input-bordered"
+            required
+          />
+        </label>
+
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">Пароль</span>
+          </div>
+
+          <input
+            id="password"
+            type="password"
+            class="input input-bordered"
+            required
+          />
+        </label>
+
+        <p id="error" class="text-error text-sm min-h-5"></p>
+
+        <button class="btn btn-primary w-full" type="submit">
+          Зарегистрироваться
+        </button>
+
+        <p class="text-center text-sm mt-2">
+          Уже есть аккаунт?
+
+          <a class="link link-primary" href="/login">
+            Войти
+          </a>
+        </p>
+      </div>
+    </form>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
